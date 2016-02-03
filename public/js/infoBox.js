@@ -81,8 +81,8 @@ function getLoc(surgery){ //extracts google location from surgery object
 
 function addGPMarkers(markers){
 
-    for (var i = 0; i < oGPsData.surgeries.length; i++){
-        var surgery = oGPsData.surgeries[i];
+    for (var i = 0; i < oPOIData.surgeries.length; i++){
+        var surgery = oPOIData.surgeries[i];
         if (surgery.geoStatus == "OK"){
             var name = surgery.name;
             var loc = getLoc(surgery);
@@ -200,9 +200,6 @@ function popPyramid(oPopDataIdYear, maxValue){
 
     console.log(aBucketFemale)
 
-    var aKeyNames = ["Population Count", "General Practice Visits"];
-    var aKeyWidth = [50, 80];
-
     var totalPop = sumArray(aPopDataMale) + sumArray(aPopDataFemale);
     var totalConsult = sumArray(aConsultDataMale) + sumArray(aConsultDataFemale);
     var totalsString = "Total patients = "
@@ -211,22 +208,23 @@ function popPyramid(oPopDataIdYear, maxValue){
                         + numberWithCommas(totalConsult);
     $("#totalsText").html(totalsString);
 
-    var w = 800,
-        h = 700;
+    var w = 800;
+    var h = 700;
+    console.log("width: " + w + " height: " + h);
 
     var keyWidth1 = 50;
     var keyWidth2 = 100;
 
     var margin = {
-        top: 60,
-        right: 80,
-        bottom: 60,
-        left: 80,
+        top: 40,
+        right: 40,
+        bottom: 80,
+        left: 40,
         middle: 0
     };
 
 // the width of each side of the chart
-    var regionWidth = w/2 - margin.middle;
+    var regionWidth = w/2;
 
 // these are the x-coordinates of the y-axes
     var pointA = regionWidth,
@@ -239,41 +237,15 @@ function popPyramid(oPopDataIdYear, maxValue){
         .classed("svg-container", true) //container class to make it responsive
         .attr("id", "featureInfoContainer")
         .append("svg")
-        .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", "0 0 " + (margin.left + w + margin.right) + " " + (margin.top + h + margin.bottom) )
-        .classed("svg-content-responsive", true)
+        .attr("preserveAspectRatio", "xMinYMax meet")
+        .attr("viewBox", "0 0 " + (w + margin.left + margin.right) + " " + (h + margin.top + margin.bottom))
+        //.classed("svg-content-responsive", true)
         .append('g')
         .attr('transform', translation(margin.left, margin.top));
 
-
-    ////add people icons
-    //var img = svg.selectAll("image")
-    //    .data(aBucketMale)
-    //    .enter()
-    //    .append("svg:image")
-    //    .attr("xlink:href", function(d, i){
-    //        return aMaleImages[i];
-    //    })
-    //    .attr("width", 500)
-    //    .attr("height", 500)
-    //    .attr("x", function(d, i){
-    //        console.log(pointA)
-    //        return pointA - (i * 200);
-    //    })
-    //    .attr("y", h - 500)
-    //    .attr("opacity", 0.1)
-
-// find the maximum data value on either side
-//  since this will be shared by both of the x-axes
-//    var maxValue = Math.max(
-//        Math.max.apply( Math, aPopDataMale ),
-//        Math.max.apply( Math, aPopDataFemale )
-//    );
-
-// SET UP SCALES
-
-// the xScale goes from 0 to the width of a region
-//  it will be reversed for the left x-axis
+    // SET UP SCALES
+    // the xScale goes from 0 to the width of a region
+    //  it will be reversed for the left x-axis
     var xScale = d3.scale.linear()
         .domain([0, maxValue])
         .range([0, regionWidth])
@@ -293,19 +265,13 @@ function popPyramid(oPopDataIdYear, maxValue){
         .rangeRoundBands([h,0], 0.1);
 
 
-// SET UP AXES
+    // SET UP AXES
     var yAxisLeft = d3.svg.axis()
         .scale(yScale)
         .orient('left')
         .tickSize(0,0)
         //.tickPadding(margin.middle-4);
 
-
-    //var yAxisRight = d3.svg.axis()
-    //    .scale(yScale)
-    //    .orient('left')
-    //    .tickSize(4,0)
-    //    .tickFormat('');
 
     var xAxisRight = d3.svg.axis()
             .scale(xScale)
@@ -318,8 +284,8 @@ function popPyramid(oPopDataIdYear, maxValue){
         .orient('bottom')
         .ticks(5);
 
-// MAKE GROUPS FOR EACH SIDE OF CHART
-// scale(-1,1) is used to reverse the left side so the bars grow left instead of right
+    // MAKE GROUPS FOR EACH SIDE OF CHART
+    // scale(-1,1) is used to reverse the left side so the bars grow left instead of right
     var leftBarGroup = svg.append('g')
         .attr('transform', translation(pointA, 0) + 'scale(-1,1)')
         .attr('fill', 'steelblue');
@@ -339,19 +305,13 @@ function popPyramid(oPopDataIdYear, maxValue){
     var keyGroup = svg.append('g')
         .attr('transform', translation(w + margin.left + margin.right - keyWidth2 - keyWidth2 - 100, 0));
 
-// DRAW AXES
+    // DRAW AXES
     svg.append('g')
         .attr('class', 'axis y left')
         .attr('transform', translation(0, 0))
         .call(yAxisLeft)
         .selectAll('text')
         .style('text-anchor', 'middle')
-
-
-    //svg.append('g')
-    //    .attr('class', 'axis y right')
-    //    .attr('transform', translation(pointB, 0))
-    //    .call(yAxisRight);
 
     svg.append('g')
         .attr('class', 'axis x left')
@@ -363,7 +323,7 @@ function popPyramid(oPopDataIdYear, maxValue){
         .attr('transform', translation(pointB, h))
         .call(xAxisRight);
 
-// DRAW BARS
+    // DRAW BARS
     leftBarGroup2.selectAll('.bar.left2')
         .data(aConsultDataMale)
         .enter().append('rect')
@@ -400,7 +360,7 @@ function popPyramid(oPopDataIdYear, maxValue){
         .attr('width', function(d) { return xScale(d); })
         .attr('height', yScale.rangeBand());
 
-//keys
+    //keys
     var pointerCircle = svg.append("circle")
                             .attr("cx", pointA)
                             .attr("cy", yScale.rangeBand()* 4)
@@ -520,11 +480,13 @@ function getPopMaxValue(oPopDataId){
 }
 
 function loadFeatureInfoBox(oPopDataId) {
+    $("#mapContainer").hide();
+    $("#featureContainer").show();
+    $(".nqmindsTitle").hide();
+    $(".nqmindsBack").show();
     var year = $("#yearList").val();
     var maxValue = getPopMaxValue(oPopDataId);
-    popPyramid(oPopDataId[year], maxValue)
-
-    $(".featureInfo").modal("show");
+    popPyramid(oPopDataId[year], maxValue);
 }
 
 function featureClick(event){

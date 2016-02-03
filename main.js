@@ -1,3 +1,4 @@
+var argv = require("minimist")(process.argv.slice(2));
 var express = require("express");
 var jade = require("jade");
 var bodyParser = require("body-parser");
@@ -5,12 +6,24 @@ var app = express();
 var aMapStyles = require("./public/stylesheets/styledMap.json");
 var aMapStylesLocal = require("./public/stylesheets/styledMapLocal.json");
 
-var oGeoLSOA = require("./data/geoLSOA.json");
-var oPopData = require("./data/popData.json");
-var oConsultationData = require("./data/consultationRates.json");
-var oGPsData = require("./data/gpSurgeries.json");
+// Must have a configuration specified on the command line.
+if (!argv.config) {
+  console.log("");
+  console.log("Usage error");
+  console.log("specify a configuration file using --config myconfig.json");
+  console.log("");
+  process.exit(-1);
+}
+
 var baseYear = "2015";
 var homeYear = "2017";
+
+var config = require(argv.config);
+var oGeoLSOA = require(config.geoData);
+var oPopData = require(config.popData);
+var oConsultationData = require(config.consultationData);
+var oPOIData = require(config.poiData);
+var oPressureData = calculatePressure(oPopData, oConsultationData);
 
 app.set("views", __dirname + "/views");
 app.set("view engine","jade");
@@ -47,8 +60,7 @@ function calculatePressure(oPopData, oConsultationData){
 
 app.get('/references', function(req, res){
     res.render('references');
-})
-
+});
 
 app.get("/pressure_data/:year/", function(req, res){
     var year = req.params["year"];
@@ -60,23 +72,19 @@ app.get("/pop_data/:id/", function(req, res){
     res.json(oPopData[id]);
 });
 
-
 app.get('/', function(req, res){
     res.render('index', {
-                        title: "GP_Map"
+                          config: config
                         , year: homeYear
                         , mapStyle: aMapStyles
                         , mapStyleLocal: aMapStylesLocal
                         , geoData: oGeoLSOA
                         , pressureData: oPressureData[homeYear]
                         , consultationData: oConsultationData
-                        , gpSurgeryData: oGPsData
+                        , poiData: oPOIData
                         }
     );
 });
 
-
-
-
-var oPressureData = calculatePressure(oPopData, oConsultationData);
-app.listen(3020);
+app.listen(config.port);
+console.log("listening on %d", config.port);

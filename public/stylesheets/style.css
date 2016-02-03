@@ -1,5 +1,7 @@
-body {
+html, body {
     background-color: white;
+    height: 100%;
+    overflow-y: hidden;
 }
 
 .navbar-brand {
@@ -32,14 +34,12 @@ body {
 
 
 #mapContainer{
-    padding: 50px 0px 0px 0px;
-    margin: 0px;
-    width: 98%;
-    height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .form-control{
-    top: 0;
+    top: 2;
     height: 25px;
     font-size: 10px;
 }
@@ -60,6 +60,7 @@ body {
 
 #buttonRow{
     padding: 10px 0px 10px 0px;
+    margin: 0;
 }
 
 #modalYear{
@@ -88,7 +89,7 @@ body {
 
 .mapCanvas {
     position: absolute;
-    top: 50px;
+    top: 60px;
     left: 0px;
     right: 0px;
     bottom: 0px;
@@ -101,14 +102,14 @@ body {
 
 #keyCanvas {
     /*display: inline-block;*/
-    position: relative;
-    width: 10%;
-    padding-bottom: 30%; /* aspect ratio */
-    vertical-align: bottom;
-    margin-top: 2%;
-    margin-left: 90%;
-    overflow: hidden;
+    position: fixed;
+    top: 160px;
+    right: 5px;
+    z-index: 10;
+    width: 100px;
+    height: 295px;
 }
+
 .svg-content-responsive {
     display: inline-block;
     position: absolute;
@@ -133,13 +134,12 @@ body {
 }
 
 .loading {
-    display: none;
     position: absolute;
-    top: 50px;
+    top: 60px;
     left: 0px;
-    bottom: 0px;
     right: 0px;
-    background-image: url("loading.gif");
+    bottom: 0px;
+    background-image: url("loading.GIF");
     background-position: center center;
     background-repeat: no-repeat;
     z-index: 12;
@@ -169,4 +169,48 @@ body {
 
 #sadFaceImage{
 	height: 20px;
+}
+
+#featureContainer {
+    display: none;
+    margin: 64px 0px 0px 0px;
+    padding: 0;
+    max-width: 600px;
+}
+
+.nqmindsHeader {
+    position: fixed;
+    top: 0;
+    background-color: #78909C;
+    box-shadow: 0px 2px 2px rgba(0,0,0,0.4);
+    z-index: 2;
+    width: 100%;
+    height: 60px;
+}
+
+.nqmindsTitle {
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    color: white;
+    padding-left: 10px;
+    padding-top: 15px;
+}
+
+.nqmindsContent {
+    margin-top: 60px;
+    height: 100%;
+}
+
+.nqmindsBack {
+    display:none;
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    color: white;
+    padding-left: 10px;
+    padding-top: 15px;
+}
+
+.nqmindsBack a {
+    text-decoration: none;
+    color: white;
 }

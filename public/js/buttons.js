@@ -57,12 +57,16 @@ function polygonColors(year){
     $('.loading').show();
     if(oPressureData.hasOwnProperty(year)) {
         addPolygonColors((oPressureData[year]))
-        $('.loading').hide();
+        setTimeout(function() {
+            $('.loading').hide();
+        },100);
     } else {
         $.ajax("/pressure_data/" + year).done(function (oPressureDataYear) {
             oPressureData[year] = oPressureDataYear;
             addPolygonColors((oPressureData[year]))
-            $('.loading').hide();
+            setTimeout(function() {
+                $('.loading').hide();
+            },100);
         });
     };
 }
@@ -75,9 +79,6 @@ $(function () { //change year from list
         polygonColors(year);
     });
 });
-
-
-
 
 $(function () {
     $(".forwardButton").click(function(){ //change from forward button
@@ -112,12 +113,11 @@ $(function () { // change from back button
 
 function updateModal(year) {
 
-    if($(".featureInfo").hasClass('in') ) {
+    if($("#featureContainer").is(':visible') ) {
         $("#featureTitle").html(" Who will be visiting the doctor in " + year);
         var id = $(".modal-header").attr("id");
         //console.log(oPopData);
         loadFeatureInfoBox(oPopData[id]);
-
     }
 
 }
@@ -152,3 +152,13 @@ $(function() { //search address
         gpFlag = false;
     })
 })
+
+$(function() {
+    $("#closeFeature").click(function(e) {
+        e.preventDefault();
+        $("#mapContainer").show();
+        $("#featureContainer").hide();
+        $(".nqmindsTitle").show();
+        $(".nqmindsBack").hide();
+    });
+});

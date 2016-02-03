@@ -51,7 +51,7 @@ function addKeyD3() {
         //.attr("preserveAspectRatio", "xMinYMin meet")
         //.attr("viewBox", "0 0 " + w + " " + (h) )
         //class to make it responsive
-        .classed("svg-content-responsive", true);
+        //.classed("svg-content-responsive", true);
 
 
     //var h = Number(svg.style("height").slice(0, -2));
