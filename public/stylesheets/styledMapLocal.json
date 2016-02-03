@@ -1,0 +1,59 @@
+[
+  {
+    "featureType": "landscape",
+    "stylers": [
+      { "visibility": "off" }
+    ]
+  },{
+  "featureType": "poi",
+  "stylers": [
+    { "visibility": "off" }
+  ]
+},{
+  "featureType": "road",
+  "stylers": [
+    { "visibility": "off" }
+  ]
+},{
+  "featureType": "road.highway",
+  "stylers": [
+    { "visibility": "simplified" }
+  ]
+},{
+  "featureType": "road.arterial",
+  "stylers": [
+    { "visibility": "simplified" }
+  ]
+},{
+  "featureType": "transit",
+  "stylers": [
+    { "visibility": "off" }
+  ]
+},{
+  "featureType": "water",
+  "stylers": [
+    { "visibility": "simplified" }
+  ]
+},{
+  "featureType": "administrative",
+  "stylers": [
+    { "visibility": "off" }
+  ]
+},{
+  "featureType": "administrative.country",
+  "stylers": [
+    { "visibility": "simplified" }
+  ]
+},{
+  "featureType": "administrative.province",
+  "stylers": [
+    { "visibility": "simplified" }
+  ]
+},{
+  "featureType": "administrative.locality",
+  "stylers": [
+    { "visibility": "simplified" }
+  ]
+},{
+}
+]
