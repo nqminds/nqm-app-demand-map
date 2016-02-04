@@ -1,0 +1,9 @@
+{
+  "title": "Hampshire GP Demand Map",
+  "port": 3020,
+  "geoData": "./data/gp/gp-geo-lsoa.json",
+  "popData": "./data/gp/gp-pop.json",
+  "consultationData": "./data/gp/gp-consultation-rates.json",
+  "poiData": "./data/gp/gp-poi.json",
+  "showPOI": true
+}

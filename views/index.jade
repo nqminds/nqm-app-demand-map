@@ -1,0 +1,41 @@
+extends layout
+
+block content
+
+	#featureContainer
+		#featureHeader
+			h4#featureTitle
+			.btn-group#modalHeaderButtons
+				button.backButton.btn.btn-default(type='submit').glyphicon.glyphicon-minus
+				button.forwardButton.btn.btn-default(type='submit').glyphicon.glyphicon-plus
+			p#totalsText
+		#featureInfoCanvas
+		h5#featureIdTitle
+
+	.container#mapContainer
+		.row#buttonRow
+			.col-sm-4
+				.input-group#findAddress
+					input#address.form-control(type='text', name='username', placeholder='Search')
+					span.input-group-btn
+						button#findButton.btn.btn-default.btn(type='submit').glyphicon.glyphicon-search
+			.col-sm-4
+				.input-group.findYear
+					span.input-group-btn
+						button.backButton.btn.btn-default(type='submit').glyphicon.glyphicon-minus
+					select#yearList.form-control
+					span.input-group-btn
+						button.forwardButton.btn.btn-default(type='submit').glyphicon.glyphicon-plus
+
+			.col-sm-4
+				- if (locals.config.showPOI) {
+					.input-group#showPOI
+						span.input-group-btn
+							button#gpButton.btn.btn-default.btn(type='submit') Show GP Surgeries
+						span.input-group-btn
+							button#hideButton.btn.btn-default.btn(type='submit').glyphicon.glyphicon-remove
+				- }
+
+		.mapCanvas
+
+		.loading

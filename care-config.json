@@ -1,0 +1,9 @@
+{
+  "title": "Elderly Care Demand Map",
+  "port": 3023,
+  "geoData": "./data/care/care-geo-lsoa.json",
+  "popData": "./data/care/care-pop.json",
+  "consultationData": "./data/care/care-consultation-rates.json",
+  "poiData": "./data/care/care-poi.json",
+  "showPOI": false
+}
