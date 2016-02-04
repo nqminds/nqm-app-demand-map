@@ -68,10 +68,9 @@ html, body {
 
 }
 
-#showGP{
+#showPOI {
     z-index: 11;
     width: 150px;
-
 }
 
 .findYear{
@@ -155,20 +154,8 @@ html, body {
     margin:0;
 }
 
-
-
-#takemeBtn {
-	font-size: 15px;
-	text-align: left;
-	
-}
-
-#welcomeInfoCanvas{
-	padding: 20px;
-}
-
-#sadFaceImage{
-	height: 20px;
+#featureHeader {
+    padding-left: 10px;
 }
 
 #featureContainer {

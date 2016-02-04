@@ -68,19 +68,16 @@ function initialize() {
         zoomChanged()
     });
 
-    map.data.addListener('click', function(event) {
-        featureClick(event)
-    });
+    if (config.showPOI) {
+        map.data.addListener('click', function(event) {
+            featureClick(event)
+        });
+    }
 
     loadGeoData()
     setYearOptions()
     polygonColors(year)
     addKeyD3()
-	
-	var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-	if (w < 800){
-		$(".welcomeInfo").modal("show");
-	}
 }
 
 var oKeyColors = setKeyColors()

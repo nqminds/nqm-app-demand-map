@@ -14,19 +14,20 @@ html
 		link(href='/libs/bootstrap/css/bootstrap.min.css', rel='stylesheet')
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		link(rel='stylesheet', href='/stylesheets/popPyramid.css')
-
 		script(src="https://maps.googleapis.com/maps/api/js?v=3.exp")
 		//script(src="http://maps.google.com/maps/api/js?sensor=false&v=3&libraries=geometry")
 		script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")
 		script(src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
 		script(src='/libs/markerclusterer.js')
-
 		script(src="/js/addKey.js")
 		script(src="/js/infoBox.js")
 		script(src="/js/buttons.js")
 		script(src="/js/maps.js")
 		script(src="http://d3js.org/d3.v3.min.js")
+
 		script.
+
+			var config = !{JSON.stringify(config)};
 			var year = !{JSON.stringify(year)};
 			var mapStyles = !{JSON.stringify(mapStyle)};
 			var mapStylesLocal = !{JSON.stringify(mapStyleLocal)};
@@ -34,16 +35,16 @@ html
 			var oPressureDataYear = !{JSON.stringify(pressureData)};
 			var oPressureData = {};
 			var oPopData = {};
-			oPressureData[year] =  oPressureDataYear;
 			var oConsultationData = !{JSON.stringify(consultationData)};
 			var oPOIData = !{JSON.stringify(poiData)};
+			oPressureData[year] =  oPressureDataYear;
 
 	body
 
 		.nqmindsHeader
 			.nqmindsTitle nqminds - #{config.title}
 			.nqmindsBack
-				a#closeFeature(href="#") < BACK
+				a#closeFeature(href="#") < back
 
 		.nqmindsContent
 			block content

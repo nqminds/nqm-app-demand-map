@@ -2,22 +2,6 @@ extends layout
 
 block content
 
-	.welcomeInfo.modal.fade
-		.modal-dialog#welcomeDialog
-			.modal-content
-				.modal-header
-					button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
-					.modal-title
-						h4#welcomeTitle Sorry #{""}
-							span
-								img#sadFaceImage(src="/images/sadface.png")
-				.modal-body#welcomeInfoCanvas
-					p This is an ALPHA release
-					P and has not been optimised 
-					p for small screens.
-					br
-					button.close.pull-left(type="button",data-dismiss="modal")#takemeBtn Take me to the map anyway!
-
 	#featureContainer
 		#featureHeader
 			h4#featureTitle
@@ -42,12 +26,15 @@ block content
 					select#yearList.form-control
 					span.input-group-btn
 						button.forwardButton.btn.btn-default(type='submit').glyphicon.glyphicon-plus
+
 			.col-sm-4
-				.input-group#showGP
-					span.input-group-btn
-						button#gpButton.btn.btn-default.btn(type='submit') Show GP Surgeries
-					span.input-group-btn
-						button#hideButton.btn.btn-default.btn(type='submit').glyphicon.glyphicon-remove
+				- if (locals.config.showPOI) {
+					.input-group#showPOI
+						span.input-group-btn
+							button#gpButton.btn.btn-default.btn(type='submit') Show GP Surgeries
+						span.input-group-btn
+							button#hideButton.btn.btn-default.btn(type='submit').glyphicon.glyphicon-remove
+				- }
 
 		.mapCanvas
 
