@@ -1,7 +1,7 @@
 html
    head
-      link(rel='stylesheet', href='http://cdn.webix.com/edge/webix.css', type='text/css')
-      script(src='http://cdn.webix.com/edge/webix.js', type='text/javascript')
+      link(rel="stylesheet", href="/webix/webix.css", type="text/css")
+      script(type="text/javascript", src="/webix/webix.js")
 
       link(rel='stylesheet', href='/stylesheets/style.css')
 
@@ -20,10 +20,6 @@ html
 
       script(type="text/javascript", src="/js/webix-googlemap.js")
 
-
-      //script(type="text/javascript", src="/js/webix-client.js")
-
-
       script.
          var mapId = !{JSON.stringify(mapId)};
          var oMap = !{JSON.stringify(oMap)};
@@ -40,6 +36,8 @@ html
          oDemandData[year] = oDemandDataYear;
          var oRateData = !{JSON.stringify(rateData)};
          var supplyPoints = undefined;
+
+      title #{oMap.header}
 
 
    body
