@@ -29,7 +29,7 @@ function createMarker(surgery, loc, name, id){ // create a marker with a info wi
 
     var marker = new google.maps.Marker({position: loc,
                                         title: name,
-                                        icon: "/images/medical96.png"
+                                        icon: "http://maps.google.com/mapfiles/kml/pal4/icon57.png"
                                         });
 
     google.maps.event.addListener(marker, 'click', function () {
@@ -59,7 +59,7 @@ function hideMarkers(){
 
 function showMarkers(){
     markers = addGPMarkers(markers)
-    var mcOptions = {gridSize: 30, maxZoom: 14};
+    var mcOptions = {gridSize: 1, maxZoom: 1};
     markerCluster = new MarkerClusterer(map, markers, mcOptions);
 }
 
@@ -67,9 +67,10 @@ function showMarkers(){
 function addSearchMarker(loc_Center, name){
     var marker = new google.maps.Marker({position: loc_Center, title: name});
     google.maps.event.addListener(marker, 'click', function () {
-        var infowindow = new google.maps.InfoWindow({content: name
-                                                    , maxWidth: 200
-                                                    })
+        var infowindow = new google.maps.InfoWindow({
+            content: name,
+            maxWidth: 200
+        })
         infowindow.open(map, marker);
     })
     return marker
@@ -81,8 +82,8 @@ function getLoc(surgery){ //extracts google location from surgery object
 
 function addGPMarkers(markers){
 
-    for (var i = 0; i < oPOIData.surgeries.length; i++){
-        var surgery = oPOIData.surgeries[i];
+    for (var i = 0; i < oGPsData.surgeries.length; i++){
+        var surgery = oGPsData.surgeries[i];
         if (surgery.geoStatus == "OK"){
             var name = surgery.name;
             var loc = getLoc(surgery);
@@ -187,44 +188,44 @@ function popPyramid(oPopDataIdYear, maxValue){
 
     var aAges = createAgeArray(oPopDataIdYear);
 
-    var aRes = createSexArray(oPopDataIdYear["male"], oConsultationData["consultationRates"]["male"]);
+    var aRes = createSexArray(oPopDataIdYear["male"], oRateData["consultationRates"]["male"]);
     var aPopDataMale = aRes[0];
     var aConsultDataMale = aRes[1];
     var aBucketMale = bucketArray(aConsultDataMale);
     var aMaleImages = ["images/boyMale.png", "images/male.png", "images/oldMale.png"]
 
-    var aRes = createSexArray(oPopDataIdYear["female"], oConsultationData["consultationRates"]["female"]);
+    var aRes = createSexArray(oPopDataIdYear["female"], oRateData["consultationRates"]["female"]);
     var	aPopDataFemale = aRes[0];
     var aConsultDataFemale = aRes[1];
     var aBucketFemale = bucketArray(aConsultDataFemale);
 
-    console.log(aBucketFemale)
+    var aKeyNames = ["Population Count", "General Practice Visits"];
+    var aKeyWidth = [50, 80];
 
     var totalPop = sumArray(aPopDataMale) + sumArray(aPopDataFemale);
     var totalConsult = sumArray(aConsultDataMale) + sumArray(aConsultDataFemale);
-    var totalsString = "Total patients = "
+    var totalsString = "Total population = "
                         + numberWithCommas(totalPop)
-                        + ", with the total number of GP visits = "
+                        + ", total demand = "
                         + numberWithCommas(totalConsult);
     $("#totalsText").html(totalsString);
 
-    var w = 800;
-    var h = 700;
-    console.log("width: " + w + " height: " + h);
+    var w = 800,
+        h = 700;
 
     var keyWidth1 = 50;
     var keyWidth2 = 100;
 
     var margin = {
-        top: 40,
-        right: 40,
-        bottom: 80,
-        left: 40,
+        top: 60,
+        right: 80,
+        bottom: 60,
+        left: 80,
         middle: 0
     };
 
 // the width of each side of the chart
-    var regionWidth = w/2;
+    var regionWidth = w/2 - margin.middle;
 
 // these are the x-coordinates of the y-axes
     var pointA = regionWidth,
@@ -237,15 +238,41 @@ function popPyramid(oPopDataIdYear, maxValue){
         .classed("svg-container", true) //container class to make it responsive
         .attr("id", "featureInfoContainer")
         .append("svg")
-        .attr("preserveAspectRatio", "xMinYMax meet")
-        .attr("viewBox", "0 0 " + (w + margin.left + margin.right) + " " + (h + margin.top + margin.bottom))
-        //.classed("svg-content-responsive", true)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 " + (margin.left + w + margin.right) + " " + (margin.top + h + margin.bottom) )
+        .classed("svg-content-responsive", true)
         .append('g')
         .attr('transform', translation(margin.left, margin.top));
 
-    // SET UP SCALES
-    // the xScale goes from 0 to the width of a region
-    //  it will be reversed for the left x-axis
+
+    ////add people icons
+    //var img = svg.selectAll("image")
+    //    .data(aBucketMale)
+    //    .enter()
+    //    .append("svg:image")
+    //    .attr("xlink:href", function(d, i){
+    //        return aMaleImages[i];
+    //    })
+    //    .attr("width", 500)
+    //    .attr("height", 500)
+    //    .attr("x", function(d, i){
+    //        console.log(pointA)
+    //        return pointA - (i * 200);
+    //    })
+    //    .attr("y", h - 500)
+    //    .attr("opacity", 0.1)
+
+// find the maximum data value on either side
+//  since this will be shared by both of the x-axes
+//    var maxValue = Math.max(
+//        Math.max.apply( Math, aPopDataMale ),
+//        Math.max.apply( Math, aPopDataFemale )
+//    );
+
+// SET UP SCALES
+
+// the xScale goes from 0 to the width of a region
+//  it will be reversed for the left x-axis
     var xScale = d3.scale.linear()
         .domain([0, maxValue])
         .range([0, regionWidth])
@@ -265,13 +292,19 @@ function popPyramid(oPopDataIdYear, maxValue){
         .rangeRoundBands([h,0], 0.1);
 
 
-    // SET UP AXES
+// SET UP AXES
     var yAxisLeft = d3.svg.axis()
         .scale(yScale)
         .orient('left')
         .tickSize(0,0)
         //.tickPadding(margin.middle-4);
 
+
+    //var yAxisRight = d3.svg.axis()
+    //    .scale(yScale)
+    //    .orient('left')
+    //    .tickSize(4,0)
+    //    .tickFormat('');
 
     var xAxisRight = d3.svg.axis()
             .scale(xScale)
@@ -284,34 +317,40 @@ function popPyramid(oPopDataIdYear, maxValue){
         .orient('bottom')
         .ticks(5);
 
-    // MAKE GROUPS FOR EACH SIDE OF CHART
-    // scale(-1,1) is used to reverse the left side so the bars grow left instead of right
-    var leftBarGroup = svg.append('g')
-        .attr('transform', translation(pointA, 0) + 'scale(-1,1)')
-        .attr('fill', 'steelblue');
+// MAKE GROUPS FOR EACH SIDE OF CHART
+// scale(-1,1) is used to reverse the left side so the bars grow left instead of right
     var leftBarGroup2 = svg.append('g')
         .attr('transform', translation(pointA, 0) + 'scale(-1,1)')
-        .attr('fill', 'lightsteelblue');
-
-    var rightBarGroup = svg.append('g')
-        .attr('transform', translation(pointB, 0))
-        .attr('fill', 'pink');
+        .attr('fill', '#a6cee3');
+    var leftBarGroup = svg.append('g')
+        .attr('transform', translation(pointA, 0) + 'scale(-1,1)')
+        .attr('fill', '#1f78b4');
 
     var rightBarGroup2 = svg.append('g')
         .attr('transform', translation(pointB, 0))
-        .attr('fill', 'lightpink');
+        .attr('fill', '#fb9a99');
+    var rightBarGroup = svg.append('g')
+        .attr('transform', translation(pointB, 0))
+        .attr('fill', '#e31a1c');
+
 
 
     var keyGroup = svg.append('g')
         .attr('transform', translation(w + margin.left + margin.right - keyWidth2 - keyWidth2 - 100, 0));
 
-    // DRAW AXES
+// DRAW AXES
     svg.append('g')
         .attr('class', 'axis y left')
         .attr('transform', translation(0, 0))
         .call(yAxisLeft)
         .selectAll('text')
         .style('text-anchor', 'middle')
+
+
+    //svg.append('g')
+    //    .attr('class', 'axis y right')
+    //    .attr('transform', translation(pointB, 0))
+    //    .call(yAxisRight);
 
     svg.append('g')
         .attr('class', 'axis x left')
@@ -323,7 +362,7 @@ function popPyramid(oPopDataIdYear, maxValue){
         .attr('transform', translation(pointB, h))
         .call(xAxisRight);
 
-    // DRAW BARS
+// DRAW BARS
     leftBarGroup2.selectAll('.bar.left2')
         .data(aConsultDataMale)
         .enter().append('rect')
@@ -360,67 +399,67 @@ function popPyramid(oPopDataIdYear, maxValue){
         .attr('width', function(d) { return xScale(d); })
         .attr('height', yScale.rangeBand());
 
-    //keys
-    var pointerCircle = svg.append("circle")
-                            .attr("cx", pointA)
-                            .attr("cy", yScale.rangeBand()* 4)
-                            .attr("r", 6)
-                            .attr("fill", "blue")
-
-    var pointerText = svg.append("text")
-        .text("dark bars = number of patients")
-        .attr("x", pointA + 100)
-        .attr("y", yScale.rangeBand() * 2 + 5)
-        .attr("fill", "blue")
-        .attr("font-size", "25px")
-        .attr("font-family", "cursive")
-
-    var lineData = [{"x":pointA, "y": yScale.rangeBand()* 4 }
-                ,{"x": pointA + 280, "y": yScale.rangeBand()* 4}
-                , {"x":pointA + 300, "y":yScale.rangeBand() * 2 + 10}]
-
-    var lineFunction = d3.svg.line()
-                             .x(function(d) { return d.x; })
-                             .y(function(d) { return d.y; })
-                             .interpolate("basis");
-
-    var pointer = svg.append("path")
-                    .attr("d", lineFunction(lineData))
-                    .attr("stroke", "blue")
-                    .attr("stroke-width", "2.5px")
-                    .attr("stroke-linecap", "round")
-                    .attr("stroke-linejoin", "round")
-                    .attr("fill", "none")
-                    //.attr("shape-rendering", "crispEdges");
-
-    leftBracket = pointA - xScale(aConsultDataMale[aConsultDataMale.length - 1]);
-    rightBracket = pointB + xScale(aConsultDataFemale[aConsultDataFemale.length - 1]);
-    centerBracket = (leftBracket + rightBracket) /2
-
-    var bracketText = svg.append("text")
-        .text("light bars = total number of visits to doctor in a year")
-        .attr('text-anchor', 'left')
-        .attr("x", pointA - 150)
-        .attr("y", -20)
-        .attr("fill", "blue")
-        .attr("font-size", "25px")
-        .attr("font-family", "cursive")
-
-    var bracketData = [{"x": leftBracket, "y": 0}
-                        ,{"x": (leftBracket + centerBracket) / 2, "y": -10}
-                        ,{"x": centerBracket - 2  , "y": 0}
-                        ,{"x": centerBracket, "y": -15}
-                        ,{"x": centerBracket + 2, "y": 0}
-                        ,{"x": (rightBracket + centerBracket) / 2, "y": -10}
-                        ,{"x": rightBracket, "y": 0}];
-
-    var bracket = svg.append("path")
-        .attr("d", lineFunction(bracketData))
-        .attr("stroke", "blue")
-        .attr("stroke-width", "2.5px")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-linejoin", "round")
-        .attr("fill", "none");
+////keys
+//    var pointerCircle = svg.append("circle")
+//                            .attr("cx", pointA)
+//                            .attr("cy", yScale.rangeBand()* 4)
+//                            .attr("r", 6)
+//                            .attr("fill", "blue")
+//
+//    var pointerText = svg.append("text")
+//        .text("inner dark bars = population")
+//        .attr("x", pointA + 140)
+//        .attr("y", yScale.rangeBand() * 2 + 5)
+//        .attr("fill", "blue")
+//        .attr("font-size", "25px")
+//        //.attr("font-family", "cursive")
+//
+//    var lineData = [{"x":pointA, "y": yScale.rangeBand()* 4 }
+//                ,{"x": pointA + 270, "y": yScale.rangeBand()* 4}
+//                , {"x":pointA + 300, "y":yScale.rangeBand() * 2.2 + 10}]
+//
+//    var lineFunction = d3.svg.line()
+//                             .x(function(d) { return d.x; })
+//                             .y(function(d) { return d.y; })
+//                             .interpolate("basis");
+//
+//    var pointer = svg.append("path")
+//                    .attr("d", lineFunction(lineData))
+//                    .attr("stroke", "blue")
+//                    .attr("stroke-width", "2.5px")
+//                    .attr("stroke-linecap", "round")
+//                    .attr("stroke-linejoin", "round")
+//                    .attr("fill", "none")
+//                    //.attr("shape-rendering", "crispEdges");
+//
+//    leftBracket = pointA - xScale(aConsultDataMale[aConsultDataMale.length - 1]);
+//    rightBracket = pointB + xScale(aConsultDataFemale[aConsultDataFemale.length - 1]);
+//    centerBracket = (leftBracket + rightBracket) /2
+//
+//    var bracketText = svg.append("text")
+//        .text("outer light bars = demand")
+//        .attr('text-anchor', 'left')
+//        .attr("x", pointA - 150)
+//        .attr("y", -20)
+//        .attr("fill", "blue")
+//        .attr("font-size", "25px")
+//        //.attr("font-family", "cursive")
+//
+//    var bracketData = [{"x": leftBracket, "y": 0}
+//                        ,{"x": (leftBracket + centerBracket) / 2, "y": -10}
+//                        ,{"x": centerBracket - 2  , "y": 0}
+//                        ,{"x": centerBracket, "y": -15}
+//                        ,{"x": centerBracket + 2, "y": 0}
+//                        ,{"x": (rightBracket + centerBracket) / 2, "y": -10}
+//                        ,{"x": rightBracket, "y": 0}];
+//
+//    var bracket = svg.append("path")
+//        .attr("d", lineFunction(bracketData))
+//        .attr("stroke", "blue")
+//        .attr("stroke-width", "2.5px")
+//        .attr("stroke-linecap", "round")
+//        .attr("stroke-linejoin", "round")
+//        .attr("fill", "none");
 
     var ageText = svg.append("text")
         .text("Age")
@@ -431,7 +470,7 @@ function popPyramid(oPopDataIdYear, maxValue){
         .attr("font-size", "25px")
 
     var xAxisText = svg.append("text")
-        .text("Population and Visit Count")
+        .text("Population and " + demandUnit.charAt(0).toUpperCase() + demandUnit.slice(1))
         .attr('text-anchor', 'middle')
         .attr("x", pointA)
         .attr("y", h + 55)
@@ -445,7 +484,7 @@ function popPyramid(oPopDataIdYear, maxValue){
         .attr("y", h + 55)
         .attr("fill", "blue")
         .attr("font-size", "25px")
-        .attr("font-family", "cursive")
+        //.attr("font-family", "cursive")
 
     var femalText = svg.append("text")
         .text("females")
@@ -454,7 +493,7 @@ function popPyramid(oPopDataIdYear, maxValue){
         .attr("y", h + 55)
         .attr("fill", "blue")
         .attr("font-size", "25px")
-        .attr("font-family", "cursive")
+        //.attr("font-family", "cursive")
 
 }
 
@@ -469,7 +508,7 @@ function getPopMaxValue(oPopDataId){
     for(year in oPopDataId){
         for(sex in oPopDataId[year]){
             for(age in oPopDataId[year][sex]) {
-                newValue = Number(oPopDataId[year][sex][age]) * Number(oConsultationData["consultationRates"][sex][age])
+                newValue = Number(oPopDataId[year][sex][age]) * Number(oRateData["consultationRates"][sex][age])
                 if(newValue > maxValue) {
                     maxValue = newValue
                 }
@@ -480,31 +519,14 @@ function getPopMaxValue(oPopDataId){
 }
 
 function loadFeatureInfoBox(oPopDataId) {
-    $("#mapContainer").hide();
-    $("#featureContainer").show();
-    $(".nqmindsTitle").hide();
-    $(".nqmindsBack").show();
     var year = $("#yearList").val();
     var maxValue = getPopMaxValue(oPopDataId);
-    popPyramid(oPopDataId[year], maxValue);
+    popPyramid(oPopDataId[year], maxValue)
+
+    $(".featureInfo").modal("show");
 }
 
-function featureClick(event){
 
-    var id = event.feature.getProperty('LSOA01CD');
-    var name = event.feature.getProperty('LSOA01NM');
-    var year = $("#yearList").val();
 
-    $("#featureTitle").html(" Who will be visiting the doctor in " + year)
-    $(".modal-header").attr("id", id)
-    $("#featureIdTitle").html("Local Area: " + name);
 
-    if (oPopData.hasOwnProperty(id)){
-        loadFeatureInfoBox(oPopData[id]);
-    } else {
-        $.ajax("/pop_data/" + id ).done(function (oPopDataId) {
-            oPopData[id] = oPopDataId;
-            loadFeatureInfoBox(oPopDataId);
-        });
-    };
-}
+
