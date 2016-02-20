@@ -1,33 +1,4 @@
 
-window.onload = function() {
-
-    var mapOptions = {
-        disableDefaultUI: true,
-        zoomControl: true,
-        zoomControlOptions: {
-            style: google.maps.ZoomControlStyle.LARGE,
-            position: google.maps.ControlPosition.TOP_RIGHT
-
-        },
-        styles: mapStyles
-    };
-
-    $$('map').map.setOptions(mapOptions);
-    $$('map').map.data.addGeoJson(oGeoData);
-
-    $$('map').map.data.addListener('click', function(event) {
-        featureClick(event)
-    });
-
-
-
-    setKeyColors();
-    polygonColors(year);
-    addKeyD3();
-
-
-};
-
 
 
 function getInfoBoxString(supplyPoint){
