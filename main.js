@@ -379,7 +379,9 @@ app.get("/total_pop/:id/", function(req, res){
 });
 
 
-
+app.get("/", function(req,res) {
+   res.redirect("/" + oMaps[0].id);
+});
 
 app.get('/:mapId', function(req, res){
 
