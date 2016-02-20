@@ -116,94 +116,86 @@ demandMap.uiPopPyramidChart = {
 demandMap.uiGraphComponents = {
 
     container:"graphComponents", //corresponds to the ID of the div block
-    view: "scrollview",
-    scroll: "x",
-    body: {
-        cols: [
-            {gravity: 1},
-            {
-                id: "details",
-                gravity: 20,
-                //minWidth: 200,
-                rows: [
-                    {
-                        id: "areaName",
-                        template: "<div style='padding-left:5px'>Select an area on the map</div>",
-                        height: 40
-                    },
+    cols: [
+        {
+            id: "details",
+            gravity: 20,
+            //minWidth: 200,
+            rows: [
+                {
+                    id: "areaName",
+                    template: "<div style='padding-left:5px'>Select an area on the map</div>",
+                    height: 40
+                },
 
-                    {
-                        id: "areaYear",
-                        template: "<div style='font-size: 42px; padding: 14px; color: lightgrey; font-weight: bold; vertical-align: middle;'>" + year + "</div>",
-                        gravity: 1
-                    },
-                    {
-                        id: "areaCost",
-                        template: "<h1></h1>",
-                        gravity: 2
-                    }
-                ]
-            },
-            {
-                container:"demandChart",
-                gravity: 40,
-                //minWidth: 400,
-                cols:[
-                    {
-                        rows: [
-                            {
-                                cols: [
-                                    {
-                                        template: "<div style='padding-left:5px'>Demand: " + oMap.demandUnit + "</div>",
-                                        height: 40
-                                    }
-                                ]
-                            },
-                            demandMap.uiDemandChart
+                {
+                    id: "areaYear",
+                    template: "<div style='font-size: 42px; padding: 14px; color: lightgrey; font-weight: bold; vertical-align: middle;'>" + year + "</div>",
+                    gravity: 1
+                },
+                {
+                    id: "areaCost",
+                    template: "<h1></h1>",
+                    gravity: 2
+                }
+            ]
+        },
+        {
+            container:"demandChart",
+            gravity: 40,
+            //minWidth: 400,
+            cols:[
+                {
+                    rows: [
+                        {
+                            cols: [
+                                {
+                                    template: "<div style='padding-left:5px'>Demand: " + oMap.demandUnit + "</div>",
+                                    height: 40
+                                }
+                            ]
+                        },
+                        demandMap.uiDemandChart
 
-                        ],
+                    ],
 
-                    },
-                    {
-                        rows: [
-                            {
-                                cols: [
-                                    {
-                                        template: "<div style='padding-left:5px'>Population Break Down</div>",
-                                        height: 40
-                                    }
-                                ]
-                            },
-                            demandMap.uiPopPyramidChart
+                },
+                {
+                    rows: [
+                        {
+                            cols: [
+                                {
+                                    template: "<div style='padding-left:5px'>Population Break Down</div>",
+                                    height: 40
+                                }
+                            ]
+                        },
+                        demandMap.uiPopPyramidChart
 
-                        ]
-                    }
-                ]
+                    ]
+                }
+            ]
 
-            },
-            {
-                container:"popChart",
-                //minWidth: 200,
-                gravity: 20,
-                rows:[
-                    {
-                        cols:[
-                            {
-                                template:"<div style='padding-left:5px'>Total Population</div>",
-                                height:40
-                            }
-                        ]
-                    },
-                    demandMap.uiLineChart
+        },
+        {
+            container:"popChart",
+            //minWidth: 200,
+            gravity: 20,
+            rows:[
+                {
+                    cols:[
+                        {
+                            template:"<div style='padding-left:5px'>Total Population</div>",
+                            height:40
+                        }
+                    ]
+                },
+                demandMap.uiLineChart
 
-                ]
+            ]
 
-            },
-            {gravity: 1}
-
-        ]
-    }
-
+        }
+    ]
 };
 
 
@@ -212,6 +204,7 @@ demandMap.uiGraphComponents = {
 demandMap.uiMainLayout = {
     container:"layout_div",
     multi:true,
+    type: "clean",
     view:"accordion",
     rows:[
         {
@@ -277,7 +270,7 @@ demandMap.uiHeader = {
             cols: [
                 {
                     view: "template",
-                    type: "header", template: "nquiringminds - " + oMap.header
+                    type: "header", template: "nqminds - " + oMap.header
                 }
 
 
@@ -302,8 +295,34 @@ demandMap.uiPageLayout = {
     ]
 };
 
+webix.ready(function() {
+    webix.ui.fullScreen();
+    webix.ui(demandMap.uiPageLayout);
 
+    var mapOptions = {
+        disableDefaultUI: true,
+        zoomControl: true,
+        zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.LARGE,
+            position: google.maps.ControlPosition.TOP_RIGHT
 
-var w =webix.ui(demandMap.uiPageLayout);
+        },
+        styles: mapStyles
+    };
+
+    $$('map').map.setOptions(mapOptions);
+    $$('map').map.data.addGeoJson(oGeoData);
+
+    $$('map').map.data.addListener('click', function(event) {
+        featureClick(event)
+    });
+
+    webix.Touch.limit();
+
+    setKeyColors();
+    polygonColors(year);
+    addKeyD3();
+});
+
 
 
