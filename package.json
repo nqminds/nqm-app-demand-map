@@ -1,10 +1,11 @@
 {
-  "name": "gpMap",
+  "name": "nqm-app-demand-map",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node index.js"
   },
+  "author": "leo@nquiringminds.com",
   "dependencies": {
     "body-parser": "~1.10.2",
     "cookie-parser": "~1.3.3",

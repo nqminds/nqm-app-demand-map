@@ -421,4 +421,6 @@ for(var i in oMaps){
 //var odemandData = calculatePressure(oPopData, oConsultationData);
 
 
-app.listen(3021);
+var port = 3021
+app.listen(port);
+console.log("listening on %d",port);
