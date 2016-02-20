@@ -3,16 +3,16 @@ Skin for Webix UI ( http://webix.com )
 =======================================
 
 To preview or adjust skin visit
-	http://webix.com/skin-builder/eb8cde2a
+	http://webix.com/skin-builder/d583fd40
 
 #### How to use
 
-- Replace existing webix.css with one from the package
-- If package includes webix.js, replace existing webix.js with provided one as well
+- Replace the existing webix.css with the one from the package
+- As for the js file, you can replace the existing webix.js with the one included into the package or preserve the existing js file and just add the skin.js on your web page (the second approach is useful if you either use CDN version of webix.js or Webix Pro )
 
-### Hot to update to new version of Webix
+#### How to update to a new version of Webix
 
-When new version released, just visit
-	http://webix.com/skin-builder/eb8cde2a
-and re-download the package, it will be the new version with the same skin settings
+When a new version is released, just visit 
+	http://webix.com/skin-builder/d583fd40
+and re-download the package. Thus, you’ll get the updated version of the library with the same skin settings.
 
