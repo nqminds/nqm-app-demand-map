@@ -1,9 +1,0 @@
-{
-  "title": "College Demand Map",
-  "port": 3024,
-  "geoData": "./data/college/college-geo-lsoa.json",
-  "popData": "./data/college/college-pop.json",
-  "consultationData": "./data/college/college-consultation-rates.json",
-  "poiData": "./data/college/college-poi.json",
-  "showPOI": false
-}

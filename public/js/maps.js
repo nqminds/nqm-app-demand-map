@@ -9,9 +9,6 @@ var maxVisits = 1.5;
 var minVisits = 0.5;
 
 
-
-
-
 //var aKeyValues = ["           NA", "    < 100%", "100-105%", "105-110%", "110-120%", "120-130%", "130-150%", "    > 150%"]
 
 function setYearOptions(){
@@ -68,16 +65,19 @@ function initialize() {
         zoomChanged()
     });
 
-    if (config.showPOI) {
-        map.data.addListener('click', function(event) {
-            featureClick(event)
-        });
-    }
+    map.data.addListener('click', function(event) {
+        featureClick(event)
+    });
 
     loadGeoData()
     setYearOptions()
     polygonColors(year)
     addKeyD3()
+	
+	var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+	if (w < 800){
+		$(".welcomeInfo").modal("show");
+	}
 }
 
 var oKeyColors = setKeyColors()

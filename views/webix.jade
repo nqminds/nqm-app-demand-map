@@ -1,0 +1,46 @@
+html
+   head
+      link(rel='stylesheet', href='http://cdn.webix.com/edge/webix.css', type='text/css')
+      script(src='http://cdn.webix.com/edge/webix.js', type='text/javascript')
+
+      link(rel='stylesheet', href='/stylesheets/style.css')
+
+      script(src="http://d3js.org/d3.v3.min.js")
+
+
+      script(type="text/javascript", src="http://maps.google.com/maps/api/js")
+      script(src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js")
+      script(src="http://cdn.webix.com/components/googlemap/googlemap.js")
+
+
+
+      script(src="/js/addKey.js")
+      script(src="/js/buttons.js")
+      script(src="/js/search_address.js")
+
+      script(type="text/javascript", src="/js/webix-googlemap.js")
+
+
+      //script(type="text/javascript", src="/js/webix-client.js")
+
+
+      script.
+         var mapId = !{JSON.stringify(mapId)};
+         var oMap = !{JSON.stringify(oMap)};
+         var header = !{JSON.stringify(header)};
+         var year = !{JSON.stringify(year)};
+         var id = undefined;
+         var demandUnit = !{JSON.stringify(demandUnit)};
+         var mapStyles = !{JSON.stringify(mapStyle)};
+         var mapStylesLocal = !{JSON.stringify(mapStyleLocal)};
+         var oGeoData = !{JSON.stringify(geoData)};
+         var oDemandDataYear = !{JSON.stringify(demandDataYear)};
+         var oDemandData = {};
+         var oPopData = {};
+         oDemandData[year] = oDemandDataYear;
+         var oRateData = !{JSON.stringify(rateData)};
+         var supplyPoints = undefined;
+
+
+   body
+      script(type="text/javascript", src="js/webix-ui.js")

@@ -1,9 +1,0 @@
-{
-  "title": "Secondary School Demand Map",
-  "port": 3022,
-  "geoData": "./data/secondary/secondary-geo-lsoa.json",
-  "popData": "./data/secondary/secondary-pop.json",
-  "consultationData": "./data/secondary/secondary-consultation-rates.json",
-  "poiData": "./data/secondary/secondary-poi.json",
-  "showPOI": false
-}

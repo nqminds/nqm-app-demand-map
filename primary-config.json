@@ -1,9 +1,0 @@
-{
-  "title": "Primary School Demand Map",
-  "port": 3021,
-  "geoData": "./data/primary/primary-geo-lsoa.json",
-  "popData": "./data/primary/primary-pop.json",
-  "consultationData": "./data/primary/primary-consultation-rates.json",
-  "poiData": "./data/primary/primary-poi.json",
-  "showPOI": false
-}

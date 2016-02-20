@@ -21,6 +21,7 @@ function setKeyColors(){
     }
     return oKeyColors
 }
+var oKeyColors = setKeyColors()
 
 function selectKeyColor(n){
     if (isNaN(n)){return oKeyColors["color0"]};
@@ -36,29 +37,25 @@ function selectKeyColor(n){
 
 function addKeyD3() {
 
-    var oKeyColors = setKeyColors()
+
+
+    var ele = document.createElement("div");
+
+
+    var oKeyColors = setKeyColors();
 
     var h = 300;
     var w = 100;
 
-    var svg = d3.select("#mapContainer")
-        //.append("div")
-        //.classed("svg-container", true) //container class to make it responsive
-        //.attr("id", "keyContainer")
+    var svg = d3.select(ele)
         .append("svg")
         .attr("id", "keyCanvas")
-        //responsive SVG needs these 2 attributes and no width and height attr
-        //.attr("preserveAspectRatio", "xMinYMin meet")
-        //.attr("viewBox", "0 0 " + w + " " + (h) )
-        //class to make it responsive
-        //.classed("svg-content-responsive", true);
+        .attr("width", w)
+        .attr("height", h);
 
-
-    //var h = Number(svg.style("height").slice(0, -2));
-    //var w = Number(svg.style("width").slice(0, -2));
     var rectPadding = 5;
     var keyPadding = 10;
-    var boxh = (h / aKeyValues.length - rectPadding - 2)
+    var boxh = (h / aKeyValues.length - rectPadding - 2);
 
 
     svg.selectAll("rect")
@@ -77,7 +74,7 @@ function addKeyD3() {
         .attr("width", w)
         .attr("fill", "white");
 
-    var r = boxh / 2
+    var r = boxh / 2;
 
     svg.selectAll("circle")
         .data(aKeyValues)
@@ -89,12 +86,12 @@ function addKeyD3() {
         })
         .attr("r", r)
         .attr("fill", function(d, i){
-            name = "color" + (aKeyValues.length - i - 1)
+            name = "color" + (aKeyValues.length - i - 1);
             return oKeyColors[name]
         })
-        .attr("opacity", "0.7")
+        .attr("opacity", "0.7");
 
-    var fontSize = Math.round(boxh * 0.5)
+    var fontSize = Math.round(boxh * 0.5);
     svg.selectAll("text")
         .data(aKeyValues)
         .enter()
@@ -110,6 +107,10 @@ function addKeyD3() {
         .attr("font-family", "Arial")
         .attr("font-size", fontSize + "px")
         .attr("fill", "darkslategrey");
+
+
+
+    $$("map")._contentobj.appendChild(ele.firstChild);
 
 
 }
