@@ -5,7 +5,7 @@ function findAddress(address) {
         if (status === google.maps.GeocoderStatus.OK && results.length > 0) {
             var loc_Center = results[0].geometry.location;
 
-            var map = $$("map").map;
+            var map = $$("map")._map;
 
             map.setCenter(loc_Center);
             map.setZoom(14);

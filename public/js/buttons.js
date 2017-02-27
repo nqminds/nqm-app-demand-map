@@ -8,7 +8,7 @@ function findYearIndex(){
 
 function addPolygonColors(oPressureDataYear){
 
-    $$('map').map.data.setStyle(function(feature) {
+    $$('map')._map.data.setStyle(function(feature) {
         var fid = feature.getProperty('LSOA01CD');
 
         if(typeof fid != "string"){

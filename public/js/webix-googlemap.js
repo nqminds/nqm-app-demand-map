@@ -36,12 +36,12 @@ function showMarkers(){
             supplyPoints = data.json().data;
             addMarkers();
             for (var i in markers) {
-                markers[i].setMap($$("map").map);
+                markers[i].setMap($$("map")._map);
             }
         });
     } else {
         for (var i in markers) {
-            markers[i].setMap($$("map").map);
+            markers[i].setMap($$("map")._map);
         }
     }
 
@@ -89,7 +89,7 @@ function createMarker(supplyPoint){ // create a marker with a info window
         infowindow.close();
         infowindow.setOptions({maxWidth: 400});
         infowindow.setContent(getInfoBoxString(supplyPoint));
-        infowindow.open($$("map").map, marker);
+        infowindow.open($$("map")._map, marker);
 
     });
 

@@ -289,7 +289,7 @@ demandMap.uiHeader = {
 
 demandMap.uiPageLayout = {
     rows: [
-        demandMap.uiHeader,
+        // demandMap.uiHeader,
         demandMap.uiToolbar,
         demandMap.uiMainLayout
     ]
@@ -310,10 +310,10 @@ webix.ready(function() {
         styles: mapStyles
     };
 
-    $$('map').map.setOptions(mapOptions);
-    $$('map').map.data.addGeoJson(oGeoData);
+    $$('map')._map.setOptions(mapOptions);
+    $$('map')._map.data.addGeoJson(oGeoData);
 
-    $$('map').map.data.addListener('click', function(event) {
+    $$('map')._map.data.addListener('click', function(event) {
         featureClick(event)
     });
 
